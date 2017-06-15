@@ -35,12 +35,14 @@ class DynamoDb
             return false;
         }
 
+        $expiry = time() + $time;
+
         $result = $this->getClient()->putItem([
             'Item' => [
                 'Slot'      => ['S' => $key],
                 'Host'      => ['S' => gethostname()],
                 'Timestamp' => ['N' => (string) time()],
-                'Expires'   => ['N' => (string) time() + $time],
+                'Expires'   => ['N' => (string) $expiry],
             ],
             'TableName' => $this->_config['table'],
         ]);
