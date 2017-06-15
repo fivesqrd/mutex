@@ -24,7 +24,7 @@ class Redis
 
         $attempts = 0;
 
-        while (!$this->_redis->connect($this->_config['host'], $this->_config['port'])) {
+        while (!$this->_redis->connect($this->_config['redis']['host'], $this->_config['redis']['port'])) {
 
             if ($attempts > self::MAX_POLLS) {
                 throw new \Mutex\Exception(
@@ -40,9 +40,18 @@ class Redis
         return $this->_redis;
     }
     
-    public function set($key, $value)
+    public function set($key, $time = null)
     {
-        return $this->getClient()->setNx($key, $value);
+        $lock = $this->getClient()->setNx(
+            $key, gethostname() . ':' . time()
+        );
+
+        if ($lock && $time) {
+            /* if lock was successfully acquired, set an expiration */
+            $this->expire($key, $time);
+        }
+
+        return $lock;
     }
 
     public function expire($key, $time)
