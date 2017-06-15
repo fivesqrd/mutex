@@ -19,6 +19,12 @@ $options = array(
 
 $client = new DynamoDb\DynamoDbClient($options['aws']);
 
+/*
+$result = $client->deleteTable([
+    'TableName' => $options['table'],
+]);
+*/
+
 $result = $client->createTable([
     'TableName' => $options['table'],
     'ProvisionedThroughput' => array(

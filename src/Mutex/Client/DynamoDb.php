@@ -28,7 +28,7 @@ class DynamoDb
         return $this->_dynamo;
     }
     
-    public function set($key, $time = null)
+    public function set($key, $time = 0)
     {
         if (!$this->hasExpired($key)) {
             /* locked, no go */
@@ -39,8 +39,8 @@ class DynamoDb
             'Item' => [
                 'Slot'      => ['S' => $key],
                 'Host'      => ['S' => gethostname()],
-                'Timestamp' => ['N' => time()],
-                'Expires'   => ['N' => time() + $time],
+                'Timestamp' => ['N' => (string) time()],
+                'Expires'   => ['N' => (string) time() + $time],
             ],
             'TableName' => $this->_config['table'],
         ]);
