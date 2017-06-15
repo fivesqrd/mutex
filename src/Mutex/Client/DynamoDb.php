@@ -41,7 +41,7 @@ class DynamoDb
             'Item' => [
                 'Slot'      => ['S' => $key],
                 'Host'      => ['S' => gethostname()],
-                'Timestamp' => ['N' => (string) time()],
+                'Timestamp' => ['S' => date('Y-m-d H:i:s')],
                 'Expires'   => ['N' => (string) $expiry],
             ],
             'TableName' => $this->_config['table'],
@@ -92,7 +92,7 @@ class DynamoDb
         return array(
             'Slot'      => $item['Slot']['S'],
             'Host'      => $item['Host']['S'],
-            'Timestamp' => $item['Timestamp']['N'],
+            'Timestamp' => $item['Timestamp']['S'],
             'Expires'   => $item['Expires']['N'],
         );
     }
