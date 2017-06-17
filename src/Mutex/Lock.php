@@ -7,45 +7,43 @@ class Lock
 {
     protected $_client;
 
-    public static $options = array();
+    protected $_namespace;
 
-    public static function acquire($job, $time = 30)
+    protected $_job;
+
+    public function __construct($client, $namespace, $job)
     {
-        $lock = new self(new Client\DynamoDb(self::$options));
-        
+        $this->_client = $client;
+        $this->_namespace = $namespace;
+        $this->_job = $job;
+    }
+
+    public function acquire($time = 30)
+    {
         try {
-            $key = $lock->getKey($job);
+            $key = $this->getKey($this->_job);
 
             /* wait for a random number of seconds */
             sleep(rand(0, 5));
 
-            if ($lock->set($key, $time)) {
+            if ($this->set($key, $time)) {
                 return $key;
             }
             
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             echo "Mutex lock failed: {$e->getMessage()}\n";
         }
 
         return false;
     }
 
-    public function __construct($client)
+    public function getKey()
     {
-        $this->_client = $client;
-    }
-
-    public function getKey($job)
-    {
-        if (!array_key_exists('namespace', self::$options) || empty(self::$options['namespace'])) {
-            throw new Exception('Mutex namespace not configured');
-        }
-
-        if (empty($job)) {
+        if (empty($this->_job)) {
             throw new Exception('Mutex key is required to acquire lock');
         }
 
-        return self::$options['namespace'] . ':' . $job;
+        return $this->_namespace . ':' . $this->_job;
     }
 
     public function set($key, $time = null)

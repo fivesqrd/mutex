@@ -10,8 +10,6 @@ class DynamoDb
 
     protected $_config = array();
 
-    const MAX_POLLS = 30;
-
     public function __construct($config) 
     {
         $this->_config = $config; 
@@ -26,6 +24,15 @@ class DynamoDb
         $this->_dynamo = new Aws\DynamoDbClient($this->_config['aws']);
         
         return $this->_dynamo;
+    }
+
+    public function getTable()
+    {
+        if (!isset($this->_config['table'])) {
+            throw new Exception('DynamoDb table config not provided');
+        } 
+
+        return $this->_config['table'];
     }
     
     public function set($key, $time = 0)
@@ -44,7 +51,7 @@ class DynamoDb
                 'Timestamp' => ['S' => date('Y-m-d H:i:s')],
                 'Expires'   => ['N' => (string) $expiry],
             ],
-            'TableName' => $this->_config['table'],
+            'TableName' => $this->getTable(),
         ]);
 
         $response = $result->get('@metadata');
@@ -80,7 +87,7 @@ class DynamoDb
             'Key' => [
                 'Slot' => ['S' => $key]
             ],
-            'TableName' => $this->_config['table'],
+            'TableName' => $this->getTable(),
         ]);
 
         if (!$result->hasKey('Item')) {
