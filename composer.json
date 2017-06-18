@@ -12,8 +12,8 @@
             "Mutex": "src"
         }
     },
-    "version": "2.1.0",
-    "license": ["BSD License"],
+    "version": "0.3",
+    "license": ["MIT License"],
     "authors": [
         {
             "name": "Christian Burger",

@@ -104,8 +104,13 @@ class DynamoDb
         );
     }
 
-    public function expire($key, $time)
+    public function delete($key)
     {
-        return $this->getClient()->setTimeout($key, $time);
+        $result = $this->getClient()->deleteItem([
+            'Key' => [
+                'Slot' => ['S' => $key]
+            ],
+            'TableName' => $this->getTable(),
+        ]);
     }
 }

@@ -50,4 +50,9 @@ class Lock
     {
         return $this->_client->set($key, $time);
     }
+
+    public function release()
+    {
+        return $this->_client->delete($this->getKey());
+    }
 }
