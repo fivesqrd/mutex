@@ -21,15 +21,13 @@ class Lock
     public function acquire($time = 30)
     {
         try {
-            $key = $this->getKey($this->_job);
-
             /* wait for a random number of seconds */
             sleep(rand(0, 5));
 
-            if ($this->set($key, $time)) {
-                return $key;
+            if ($this->set($time)) {
+                return $this->getKey();
             }
-            
+
         } catch (Exception $e) {
             echo "Mutex lock failed: {$e->getMessage()}\n";
         }
@@ -46,9 +44,18 @@ class Lock
         return $this->_namespace . ':' . $this->_job;
     }
 
-    public function set($key, $time = null)
+    public function set($time = null)
     {
-        return $this->_client->set($key, $time);
+        return $this->_client->set($this->getKey(), $time);
+    }
+
+    /**
+     * Extend the lock expiry by X seconds
+     * @param int $time
+     */
+    public function extend($time)
+    {
+        return $this->_client->update($this->getKey(), $time);
     }
 
     public function release()
