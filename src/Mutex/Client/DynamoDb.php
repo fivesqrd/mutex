@@ -35,10 +35,8 @@ class DynamoDb
         return $this->_config['table'];
     }
 
-    public function update($key, $time = 0)
+    protected function _put($key, $expiry)
     {
-        $expiry = time() + $time;
-
         $result = $this->getClient()->putItem([
             'Item' => [
                 'Slot'      => ['S' => $key],
@@ -58,6 +56,16 @@ class DynamoDb
         return true;
     }
 
+    public function update($key, $time = 0)
+    {
+        if ($this->hasExpired($key)) {
+            /* not locked, no go */
+            return false;
+        }
+
+        return $this->_put($key, time() + $time);
+    }
+
     public function set($key, $time = 0)
     {
         if (!$this->hasExpired($key)) {
@@ -65,25 +73,7 @@ class DynamoDb
             return false;
         }
 
-        $expiry = time() + $time;
-
-        $result = $this->getClient()->putItem([
-            'Item' => [
-                'Slot'      => ['S' => $key],
-                'Host'      => ['S' => gethostname()],
-                'Timestamp' => ['S' => date('Y-m-d H:i:s')],
-                'Expires'   => ['N' => (string) $expiry],
-            ],
-            'TableName' => $this->getTable(),
-        ]);
-
-        $response = $result->get('@metadata');
-
-        if ($response['statusCode'] != 200) {
-            throw new Exception("DynamoDb returned unsuccessful response code: {$response['statusCode']}");
-        }
-
-        return true;
+        return $this->_put($key, time() + $time);
     }
 
     public function hasExpired($key)
