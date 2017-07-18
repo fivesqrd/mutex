@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace Mutex\Client;
 
 use Aws\DynamoDb as Aws;
@@ -10,9 +10,9 @@ class DynamoDb
 
     protected $_config = array();
 
-    public function __construct($config) 
+    public function __construct($config)
     {
-        $this->_config = $config; 
+        $this->_config = $config;
     }
 
     public function getClient()
@@ -22,7 +22,7 @@ class DynamoDb
         }
 
         $this->_dynamo = new Aws\DynamoDbClient($this->_config['aws']);
-        
+
         return $this->_dynamo;
     }
 
@@ -30,11 +30,34 @@ class DynamoDb
     {
         if (!isset($this->_config['table'])) {
             throw new Exception('DynamoDb table config not provided');
-        } 
+        }
 
         return $this->_config['table'];
     }
-    
+
+    public function update($key, $time = 0)
+    {
+        $expiry = time() + $time;
+
+        $result = $this->getClient()->putItem([
+            'Item' => [
+                'Slot'      => ['S' => $key],
+                'Host'      => ['S' => gethostname()],
+                'Timestamp' => ['S' => date('Y-m-d H:i:s')],
+                'Expires'   => ['N' => (string) $expiry],
+            ],
+            'TableName' => $this->getTable(),
+        ]);
+
+        $response = $result->get('@metadata');
+
+        if ($response['statusCode'] != 200) {
+            throw new Exception("DynamoDb returned unsuccessful response code: {$response['statusCode']}");
+        }
+
+        return true;
+    }
+
     public function set($key, $time = 0)
     {
         if (!$this->hasExpired($key)) {
@@ -65,8 +88,8 @@ class DynamoDb
 
     public function hasExpired($key)
     {
-        $record = $this->get($key); 
-    
+        $record = $this->get($key);
+
         if ($record === false) {
             /* no record found, all clear */
             return true;
@@ -95,7 +118,7 @@ class DynamoDb
         }
 
         $item = $result->get('Item');
-        
+
         return array(
             'Slot'      => $item['Slot']['S'],
             'Host'      => $item['Host']['S'],
