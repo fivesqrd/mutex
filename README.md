@@ -1,12 +1,18 @@
 # Mutex
-Shared locking library for multi server implementations
+Locking library for multi server implementations using distributed selection of execution.
+
+## Install ##
+
+```composer require fivesqrd/mutex:0.3.*```
 
 ## Basic usage ##
 ```
 <?php
-
-if (!Mutex\Lock::acquire($argv[0])) {
-    echo date('Y-m-d H:i:s') . " This work slot has been locked, skipping...\n";
-    exit;
-}
+    public function handle()
+    {
+        if (!Mutex::lock(self::class)->acquire()) {
+    	    $this->info(date('Y-m-d H:i:s') . " This work slot has been locked, skipping...");
+            return;
+        }
+    }
 ```

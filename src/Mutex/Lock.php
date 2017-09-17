@@ -1,45 +1,65 @@
 <?php
 namespace Mutex;
 
+use Aws\Dynamodb;
+
 class Lock
 {
-    public static $options = array(
-        'host'      => null,
-        'port'      => null,
-        'namespace' => null
-    );
+    protected $_client;
 
-    public static function acquire($job, $time = 30)
+    protected $_namespace;
+
+    protected $_job;
+
+    public function __construct($client, $namespace, $job)
     {
-        if (!array_key_exists('namespace', self::$options) || empty(self::$options['namespace'])) {
-            throw new Exception('Mutex namespace not configured');
-        }
+        $this->_client = $client;
+        $this->_namespace = $namespace;
+        $this->_job = $job;
+    }
 
-        if (empty($job)) {
-            throw new Exception('Mutex key is required to acquire lock');
-        }
-        
+    public function acquire($time = 30)
+    {
         try {
-            $key = self::$options['namespace'] . ':' . $job;
-
             /* wait for a random number of seconds */
             sleep(rand(0, 5));
 
-            $client = new Client\Redis(self::$options);
-
-            $lock = $client->set($key, gethostname() . ':' . time());
-
-            if ($lock && $time) {
-                /* if lock was successfully acquired, set an expiration */
-                $client->expire($key, $time);
+            if ($this->set($time)) {
+                return $this->getKey();
             }
 
-            return $lock;
-            
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             echo "Mutex lock failed: {$e->getMessage()}\n";
         }
 
         return false;
+    }
+
+    public function getKey()
+    {
+        if (empty($this->_job)) {
+            throw new Exception('Mutex key is required to acquire lock');
+        }
+
+        return $this->_namespace . ':' . $this->_job;
+    }
+
+    public function set($time = null)
+    {
+        return $this->_client->set($this->getKey(), $time);
+    }
+
+    /**
+     * Extend the lock expiry by X seconds
+     * @param int $time
+     */
+    public function extend($time)
+    {
+        return $this->_client->update($this->getKey(), $time);
+    }
+
+    public function release()
+    {
+        return $this->_client->delete($this->getKey());
     }
 }

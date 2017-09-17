@@ -2,16 +2,17 @@
 	"name": "fivesqrd/mutex",
 	"description": "Shared locking library for multi server implementations",
 	"require": {
-        "php": ">=5.4.0",
-        "ext-redis": "*"
+        "php": ">=5.4.0"
+    },
+	"require-dev": {
+		"aws/aws-sdk-php": "^3.29"
     },
     "autoload": {
         "psr-0": {
             "Mutex": "src"
         }
     },
-    "version": "2.1.0",
-    "license": ["BSD License"],
+    "license": ["MIT License"],
     "authors": [
         {
             "name": "Christian Burger",
