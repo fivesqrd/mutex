@@ -2,21 +2,26 @@
 
 class Mutex
 {
-    public static $options = array();
+    protected $_options = array();
 
-    public static function lock($job)
+    public function __construct($options = array())
     {
-        if (!isset(self::$options['namespace'])) {
+        $this->_options = $options;
+    }
+
+    public function lock($job)
+    {
+        if (!isset($this->_options['namespace'])) {
             throw new Exception('Mutex namespace not configured');
         }
 
-        if (!isset(self::$options['aws'])) {
-            throw new Exception('Mutex AWS configured not provided');
+        if (!isset($this->_options['aws'])) {
+            throw new Exception('Mutex AWS settings not provided');
         }
 
         return new Mutex\Lock(
-            new Mutex\Client\DynamoDb(self::$options), 
-            self::$options['namespace'], 
+            new Mutex\Client\DynamoDb($this->_options), 
+            $this->_options['namespace'], 
             $job
         );
     }
