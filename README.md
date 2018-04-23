@@ -3,7 +3,7 @@ Locking library for multi server implementations using distributed selection of 
 
 ## Install ##
 
-```composer require fivesqrd/mutex:0.3.*```
+```composer require fivesqrd/mutex:0.4.*```
 
 ## Basic usage ##
 ```
@@ -36,7 +36,7 @@ echo  "- Lock acquired successfully...\n";
 
 ## Laravel ##
 
-In config/services.php
+In config/services.php add the config mutex and aws keys:
 ```
  	'mutex' => [
         'namespace' => 'My-App-Name',
@@ -54,9 +54,9 @@ In config/services.php
     ],
 ```
 
-In app/Providers/AppServiceProvider.php
+In app/Providers/AppServiceProvider.php register a singleton:
 ```
-  /**
+  	/**
      * Register any application services.
      *
      * @return void
@@ -71,7 +71,7 @@ In app/Providers/AppServiceProvider.php
     }
  ```
 
-In your command class
+Using it in a command class:
  ```
     /**
      * Execute the console command.

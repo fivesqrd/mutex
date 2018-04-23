@@ -2,11 +2,16 @@
 
 class Mutex
 {
-    protected $_options = array();
+    protected $_options = array(
+        'namespace' => null,
+        'table'     => null,
+        'aws'       => [],
+        'version'   => '2012-08-10'
+    );
 
     public function __construct($options = array())
     {
-        $this->_options = $options;
+        $this->_options = array_merge($this->_options, $options);
     }
 
     public function lock($job)
