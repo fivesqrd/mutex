@@ -12,7 +12,6 @@
             "Mutex": "src"
         }
     },
-    "license": ["MIT License"],
     "authors": [
         {
             "name": "Christian Burger",
