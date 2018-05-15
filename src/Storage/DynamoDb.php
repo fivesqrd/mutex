@@ -1,8 +1,8 @@
 <?php
-namespace Mutex\Client;
+namespace Fivesqrd\Mutex\Storage;
 
 use Aws\DynamoDb as Aws;
-use Mutex\Exception as Exception;
+use Fivesqrd\Mutex\Exception as Exception;
 
 class DynamoDb
 {

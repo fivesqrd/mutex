@@ -10,9 +10,11 @@ Locking library for multi server implementations using distributed selection of 
 <?php
 require_once realpath(__DIR__ . '/../vendor/autoload.php');
 
-$mutex = new Mutex([
+use Fivesqrd\Mutex;
+
+$mutex = new Mutex\Factory([
     'aws' => array(
-        'version'  => 'latest',
+        'version'  => '2012-08-10',
         'region'   => 'eu-west-1',
         'endpoint' => 'http://192.168.254.10:8000',
         'credentials' => array(
@@ -34,42 +36,18 @@ if (!$mutex->lock(basename($argv[0]))->acquire(10)) {
 echo  "- Lock acquired successfully...\n";
 ```
 
-## Laravel ##
+## Laravel 5 ##
 
-In config/services.php add the config mutex and aws keys:
+.env requirements
 ```
- 	'mutex' => [
-        'namespace' => 'My-App-Name',
-        'table'     => 'My-Dynamo-Table'
-    ],
+MUTEX_TABLE="My-Table"
+MUTEX_NAMESPACE="My-App"
 
-    'aws' => [
-        'version' => 'latest',
-        'region'  => 'eu-west-1',
-        'credentials' => [
-            'key'    => env('AWS_KEY'),
-            'secret' => env('AWS_SECRET'),
-        ],
-        'endpoint' => env('AWS_ENDPOINT') ?: null
-    ],
+AWS_KEY="my-key"
+AWS_SECRET="my-secret"
+AWS_REGION="eu-west-1"
+AWS_ENDPOINT=
 ```
-
-In app/Providers/AppServiceProvider.php register a singleton:
-```
-  	/**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        $this->app->singleton('mutex', function ($app) {
-            $config = $app->make('config')->get('services.mutex');
-            $config['aws'] = $app->make('config')->get('services.aws');
-            return new Mutex($config);
-        });
-    }
- ```
 
 Using it in a command class:
  ```

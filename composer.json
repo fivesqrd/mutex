@@ -8,9 +8,7 @@
 		"aws/aws-sdk-php": "^3.29"
     },
     "autoload": {
-        "psr-0": {
-            "Mutex": "src"
-        }
+        "psr-4": { "Fivesqrd\\Mutex\\": "src/" }
     },
     "authors": [
         {

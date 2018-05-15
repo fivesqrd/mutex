@@ -1,7 +1,5 @@
 <?php
-namespace Mutex;
-
-use Aws\Dynamodb;
+namespace Fivesqrd\Mutex;
 
 class Lock
 {

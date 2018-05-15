@@ -1,5 +1,5 @@
 <?php 
-namespace Mutex\Client;
+namespace Fivesqrd\Mutex\Storage;
 
 class Redis
 {

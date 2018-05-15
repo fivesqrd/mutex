@@ -1,5 +1,5 @@
 <?php
-namespace Mutex;
+namespace Fivesqrd\Mutex;
 
 class Exception extends \Exception
 {

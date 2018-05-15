@@ -1,12 +1,13 @@
 <?php
+namespace Fivesqrd\Mutex;
 
-class Mutex
+class Factory
 {
     protected $_options = array(
         'namespace' => null,
         'table'     => null,
         'aws'       => [
-            'version' => '2012-08-10'
+            'version' => '2012-08-10',
             'region'  => 'eu-west-1',
             'credentials' => [
                 'key'    => null,
@@ -31,8 +32,8 @@ class Mutex
             throw new Exception('Mutex AWS settings not provided');
         }
 
-        return new Mutex\Lock(
-            new Mutex\Client\DynamoDb($this->_options), 
+        return new Lock(
+            new Storage\DynamoDb($this->_options), 
             $this->_options['namespace'], 
             $job
         );
