@@ -20,7 +20,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Fivesqrd\\Mutex\\MutexServiceProvider"
+                "Fivesqrd\\Mutex\\Laravel\\MutexServiceProvider"
             ]
         }
     }
