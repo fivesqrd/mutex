@@ -5,8 +5,15 @@ class Mutex
     protected $_options = array(
         'namespace' => null,
         'table'     => null,
-        'aws'       => [],
-        'version'   => '2012-08-10'
+        'aws'       => [
+            'version' => '2012-08-10'
+            'region'  => 'eu-west-1',
+            'credentials' => [
+                'key'    => null,
+                'secret' => null,
+            ],
+            'endpoint' => null
+        ],
     );
 
     public function __construct($options = array())
