@@ -16,5 +16,12 @@
             "email": "christian@fivesqrd.com",
             "role": "Developer"
         }
-    ]
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Fivesqrd\\Mutex\\MutexServiceProvider"
+            ]
+        }
+    }
 }
