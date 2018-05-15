@@ -2,8 +2,8 @@
 
 return [
 
-    'namespace' => env('MUTEX_TABLE'),
-    'table'     => env('MUTEX_NAMESPACE'),
+    'namespace' => env('MUTEX_NAMESPACE'),
+    'table'     => env('MUTEX_TABLE'),
     'aws'       => [
         'version' => '2012-08-10',
         'region'  => env('AWS_REGION', 'eu-west-1'),
