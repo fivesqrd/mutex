@@ -20,7 +20,7 @@ class MutexServiceProvider extends Support\ServiceProvider
      */
     public function boot()
     {
-        $source = realpath($raw = __DIR__ . '/../config/mutex.php') ?: $raw;
+        $source = realpath($raw = __DIR__ . '/../../config/mutex.php') ?: $raw;
 
         if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
             $this->publishes([$source => config_path('mutex.php')]);
