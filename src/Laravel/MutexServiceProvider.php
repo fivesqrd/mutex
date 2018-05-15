@@ -48,4 +48,14 @@ class MutexServiceProvider extends Support\ServiceProvider
             Console\Test::class,
         ]);
     }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return ['mutex'];
+    }
 }
