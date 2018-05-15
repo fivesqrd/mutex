@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application as LaravelApplication;
 use Laravel\Lumen\Application as LumenApplication;
 use Illuminate\Support;
 use Aws\DynamoDb;
+use Fivesqrd\Mutex;
 
 /**
  * Atlas service provider
