@@ -3,7 +3,7 @@ Locking library for multi server implementations using distributed selection of 
 
 ## Install ##
 
-```composer require fivesqrd/mutex:0.4.*```
+```composer require fivesqrd/mutex:1.0.*```
 
 ## Basic usage ##
 ```
