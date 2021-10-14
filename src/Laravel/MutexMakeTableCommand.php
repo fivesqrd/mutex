@@ -5,7 +5,7 @@ namespace Fivesqrd\Mutex\Laravel;
 use Illuminate\Console\Command;
 use Aws\DynamoDb;
 
-class MutexCommand extends Command
+class MutexMakeTableCommand extends Command
 {
     /**
      * The name and signature of the console command.

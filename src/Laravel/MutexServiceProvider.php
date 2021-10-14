@@ -22,6 +22,10 @@ class MutexServiceProvider extends Support\ServiceProvider
     public function boot()
     {
         $this->publishes([__DIR__ . '/Config.php' => config_path('mutex.php')]);
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([]);
+        }
     }
 
     /**
@@ -38,6 +42,7 @@ class MutexServiceProvider extends Support\ServiceProvider
         });
 
         $this->commands([
+            MutexMakeTableCommand::class,
             Console\Test::class,
         ]);
     }
