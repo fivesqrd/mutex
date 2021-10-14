@@ -56,19 +56,7 @@ class MutexMakeTableCommand extends Command
                     [
                         'AttributeName' => 'Slot',
                         'AttributeType' => 'S',
-                    ],
-                    [
-                        'AttributeName' => 'Host',
-                        'AttributeType' => 'S',
-                    ],
-                    [
-                        'AttributeName' => 'Timestamp',
-                        'AttributeType' => 'S',
-                    ],
-                    [
-                        'AttributeName' => 'Expires',
-                        'AttributeType' => 'N',
-                    ],
+                    ]
                 ],
                 'KeySchema' => [
                     [
