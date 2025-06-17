@@ -20,7 +20,7 @@ class Lock
     {
         try {
             /* wait for a random number of seconds */
-            time_nanosleep(mt_rand(0, 10), mt_rand(0, 500000000));
+            time_nanosleep(mt_rand(0, 10), mt_rand(0, 750000000));
 
             if ($this->set($time)) {
                 return $this->getKey();
